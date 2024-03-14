@@ -25,7 +25,8 @@ export class ElasticService {
             properties: {
               nome: { type: 'text' },
               sobrenome: { type: 'text' },
-              idade: { type: 'text' },
+              idade: { type: 'integer' },
+              sexo: { type: 'integer' },
             },
           },
         },

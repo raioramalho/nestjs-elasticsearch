@@ -11,11 +11,12 @@ POST http://localhost:3000/document?indice=i_pessoas
 Content-Type: application/json
 
 {
-    "nome":"Alan",
-    "sobrenome":"Ramalho",
-    "idade": "27"
+    "nome":"Rogerio",
+    "sobrenome":"Brito",
+    "idade": 60,
+    "sexo": 1
 }
 
 ###GET buscar documento do indice
-GET http://localhost:3000/document?indice=i_pessoas&id=MLdZOo4BSW5lx05U1np1
+GET http://localhost:3000/document?indice=i_pessoas&id=MbdwOo4BSW5lx05U4Xoq
 Content-Type: application/json
