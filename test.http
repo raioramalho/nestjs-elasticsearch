@@ -12,7 +12,8 @@ Content-Type: application/json
 
 {
     "nome":"Alan",
-    "sobrenome":"Ramalho"
+    "sobrenome":"Ramalho",
+    "idade": "27"
 }
 
 ###GET buscar documento do indice

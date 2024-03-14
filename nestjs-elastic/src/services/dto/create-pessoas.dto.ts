@@ -5,4 +5,5 @@ export class CreatePessoasQueryDto {
 export class CreatePessoasBodyDto {
   nome: string;
   sobrenome: string;
+  idade: string;
 }

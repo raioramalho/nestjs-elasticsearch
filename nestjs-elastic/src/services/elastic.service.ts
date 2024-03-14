@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
-import { CreateIndiceDto } from './create-indice.dto';
+import { CreateIndiceDto } from './dto/create-indice.dto';
 import {
   CreatePessoasBodyDto,
   CreatePessoasQueryDto,
-} from './create-pessoas.dto';
-import { GetPessoasBodyDto, GetPessoasQueryDto } from './get-pessoas.dot';
+} from './dto/create-pessoas.dto';
+import { GetPessoasQueryDto } from './dto/get-pessoas.dto';
 
 @Injectable()
 export class ElasticService {
@@ -59,7 +59,7 @@ export class ElasticService {
     }
   }
 
-  async GetDocument(body: GetPessoasBodyDto, params: GetPessoasQueryDto) {
+  async GetDocument(params: GetPessoasQueryDto) {
     try {
       this.logger.log(
         `Gettering document with id: ${params.id} of index: ${params.indice}`,

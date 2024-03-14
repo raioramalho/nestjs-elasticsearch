@@ -1,14 +1,11 @@
 import { Body, Controller, Get, Logger, Post, Query } from '@nestjs/common';
 import { ElasticService } from './services/elastic.service';
-import { CreateIndiceDto } from './services/create-indice.dto';
+import { CreateIndiceDto } from './services/dto/create-indice.dto';
 import {
   CreatePessoasBodyDto,
   CreatePessoasQueryDto,
-} from './services/create-pessoas.dto';
-import {
-  GetPessoasBodyDto,
-  GetPessoasQueryDto,
-} from './services/get-pessoas.dot';
+} from './services/dto/create-pessoas.dto';
+import { GetPessoasQueryDto } from './services/dto/get-pessoas.dto';
 
 @Controller('')
 export class AppController {
@@ -33,11 +30,8 @@ export class AppController {
   }
 
   @Get('/document')
-  getDocument(
-    @Body() body: GetPessoasBodyDto,
-    @Query() params: GetPessoasQueryDto,
-  ) {
+  getDocument(@Query() params: GetPessoasQueryDto) {
     this.logger.log(`GET ["/document?indice=${params.indice}"]`);
-    return this.elasticService.GetDocument(body, params);
+    return this.elasticService.GetDocument(params);
   }
 }
