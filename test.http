@@ -1,7 +1,20 @@
-###POST
-POST http://localhost:3000/
+###POST cadastrar indice
+POST http://localhost:3000/indice
 Content-Type: application/json
 
 {
-    "indice":"i_pessoa"
+    "indice":"i_pessoas"
 }
+
+###POST cadastrar documento no indice
+POST http://localhost:3000/document?indice=i_pessoas
+Content-Type: application/json
+
+{
+    "nome":"Alan",
+    "sobrenome":"Ramalho"
+}
+
+###GET buscar documento do indice
+GET http://localhost:3000/document?indice=i_pessoas&id=MLdZOo4BSW5lx05U1np1
+Content-Type: application/json

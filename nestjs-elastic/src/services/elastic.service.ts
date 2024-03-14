@@ -1,19 +1,24 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { CreateIndiceDto } from './create-indice.dto';
+import {
+  CreatePessoasBodyDto,
+  CreatePessoasQueryDto,
+} from './create-pessoas.dto';
+import { GetPessoasBodyDto, GetPessoasQueryDto } from './get-pessoas.dot';
 
 @Injectable()
 export class ElasticService {
-  private readonly client: ElasticsearchService;
   private readonly logger: Logger;
-  constructor() {
+
+  constructor(private readonly search: ElasticsearchService) {
     this.logger = new Logger(ElasticService.name);
   }
 
   async createIndex(body: CreateIndiceDto) {
-    this.logger.log(`Creating data on elasticDB`);
-    return await this.client.indices
-      .create({
+    try {
+      this.logger.log(`Creating index on elasticDB: ${body.indice}`);
+      const result = await this.search.indices.create({
         index: body.indice,
         body: {
           mappings: {
@@ -23,12 +28,51 @@ export class ElasticService {
             },
           },
         },
-      })
-      .then((result) => {
-        return result;
-      })
-      .catch((err) => {
-        return err;
       });
+      return result;
+    } catch (error) {
+      this.logger.error(`Error creating index: ${error.message}`);
+      throw new HttpException(
+        `Error creating index: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
+  }
+
+  async createDocument(
+    body: CreatePessoasBodyDto,
+    params: CreatePessoasQueryDto,
+  ) {
+    try {
+      this.logger.log(`Indexing document into index: ${params.indice}`);
+      const result = await this.search.index({
+        index: params.indice,
+        body,
+      });
+      return result;
+    } catch (error) {
+      this.logger.error(`Error indexing document: ${error.message}`);
+      throw new HttpException(
+        `Error indexing document: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
+  }
+
+  async GetDocument(body: GetPessoasBodyDto, params: GetPessoasQueryDto) {
+    try {
+      this.logger.log(
+        `Gettering document with id: ${params.id} of index: ${params.indice}`,
+      );
+      return await this.search.get({
+        index: params.indice,
+        id: params.id,
+      });
+    } catch (error) {
+      throw new HttpException(
+        `Error indexing document: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
   }
 }

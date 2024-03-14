@@ -8,7 +8,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
   imports: [
     ConfigModule.forRoot(),
     ElasticsearchModule.register({
-      node: 'http://localhost:9200',
+      node: 'http://imac.local:9200',
     }),
   ],
   controllers: [AppController],
