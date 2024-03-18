@@ -11,12 +11,32 @@ POST http://localhost:3000/document?indice=i_pessoas
 Content-Type: application/json
 
 {
-    "nome":"Rogerio",
-    "sobrenome":"Brito",
-    "idade": 60,
-    "sexo": 1
+    "nome":"Iza",
+    "sobrenome":"Ribeiro",
+    "idade": 82,
+    "sexo": 0
 }
 
-###GET buscar documento do indice
-GET http://localhost:3000/document?indice=i_pessoas&id=MbdwOo4BSW5lx05U4Xoq
+
+###GET buscar todos os documentos do indice
+GET http://localhost:3000/document?indice=i_pessoas
 Content-Type: application/json
+
+###GET buscar documento do indice
+GET http://localhost:3000/document?indice=i_pessoas&id=PbcZU44BSW5lx05UDnoF
+Content-Type: application/json
+
+###DELETE remover documento do indice
+DELETE http://localhost:3000/document?indice=i_pessoas&id=PbcZU44BSW5lx05UDnoF
+Content-Type: application/json
+
+###PUT atualizar documento do indice
+PUT http://localhost:3000/document?indice=i_pessoas&id=ObeHOo4BSW5lx05UgnpY
+Content-Type: application/json
+
+{
+    "nome":"Rogerio",
+    "sobrenome":"Brito",
+    "idade": 65,
+    "sexo": 1
+}

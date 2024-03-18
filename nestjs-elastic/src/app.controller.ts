@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Logger, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ElasticService } from './services/elastic.service';
 import { CreateIndiceDto } from './services/dto/create-indice.dto';
 import {
@@ -32,6 +41,25 @@ export class AppController {
   @Get('/document')
   getDocument(@Query() params: GetPessoasQueryDto) {
     this.logger.log(`GET ["/document?indice=${params.indice}"]`);
-    return this.elasticService.GetDocument(params);
+    if (params.id === undefined) {
+      return this.elasticService.GetAllDocuments(params);
+    } else {
+      return this.elasticService.GetDocument(params);
+    }
+  }
+
+  @Put('/document')
+  updateDocument(
+    @Body() body: CreatePessoasBodyDto,
+    @Query() params: CreatePessoasQueryDto,
+  ) {
+    this.logger.log(`PUT ["/document?indice=${params.indice}"]`);
+    return this.elasticService.UpdateDocument(body, params);
+  }
+
+  @Delete('/document')
+  deleteDocument(@Query() params: GetPessoasQueryDto) {
+    this.logger.log(`DELETE ["/document?indice=${params.indice}"]`);
+    return this.elasticService.DeleteDocument(params);
   }
 }

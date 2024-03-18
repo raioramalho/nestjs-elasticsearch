@@ -27,6 +27,7 @@ export class ElasticService {
               sobrenome: { type: 'text' },
               idade: { type: 'integer' },
               sexo: { type: 'integer' },
+              foto: { type: 'binary' },
             },
           },
         },
@@ -35,7 +36,10 @@ export class ElasticService {
     } catch (error) {
       this.logger.error(`Error creating index: ${error.message}`);
       throw new HttpException(
-        `Error creating index: ${error.message}`,
+        {
+          message: `Error indexing document:`,
+          error: JSON.parse(error.message),
+        },
         HttpStatus.BAD_GATEWAY,
       );
     }
@@ -55,7 +59,27 @@ export class ElasticService {
     } catch (error) {
       this.logger.error(`Error indexing document: ${error.message}`);
       throw new HttpException(
-        `Error indexing document: ${error.message}`,
+        {
+          message: `Error indexing document:`,
+          error: JSON.parse(error.message),
+        },
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
+  }
+
+  async GetAllDocuments(params: GetPessoasQueryDto) {
+    try {
+      this.logger.log(`Gettering all documents from index: ${params.indice}`);
+      return await this.search.search({
+        index: params.indice,
+      });
+    } catch (error) {
+      throw new HttpException(
+        {
+          message: `Error indexing document:`,
+          error: JSON.parse(error.message),
+        },
         HttpStatus.BAD_GATEWAY,
       );
     }
@@ -72,8 +96,54 @@ export class ElasticService {
       });
     } catch (error) {
       throw new HttpException(
-        `Error indexing document: ${error.message}`,
+        {
+          message: `Error indexing document:`,
+          error: JSON.parse(error.message),
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+  async UpdateDocument(body: any, params: GetPessoasQueryDto) {
+    try {
+      this.logger.log(
+        `Updating document with id: ${params.id} of index: ${params.indice}`,
+      );
+      const document = await this.GetDocument(params);
+      return await this.search.update({
+        index: document._index,
+        id: document._id,
+        doc: body,
+      });
+    } catch (error) {
+      throw new HttpException(
+        {
+          message: `Error indexing document:`,
+          error: JSON.parse(error.message),
+        },
         HttpStatus.BAD_GATEWAY,
+      );
+    }
+  }
+
+  async DeleteDocument(params: GetPessoasQueryDto) {
+    try {
+      this.logger.log(
+        `Deleting document with id: ${params.id} of index: ${params.indice}`,
+      );
+      const document = await this.GetDocument(params);
+      return await this.search.delete({
+        index: document._index,
+        id: document._id,
+      });
+    } catch (error) {
+      throw new HttpException(
+        {
+          message: `Error indexing document:`,
+          error: JSON.parse(error.message),
+        },
+        HttpStatus.NOT_FOUND,
       );
     }
   }
